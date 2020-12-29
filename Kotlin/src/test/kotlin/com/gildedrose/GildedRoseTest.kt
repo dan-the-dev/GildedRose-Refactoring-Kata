@@ -173,6 +173,18 @@ internal class GildedRoseTest {
         assertEquals(0, app.items[0].quality)
     }
 
+    @Test
+    fun testConjuredQualityDropsTwiceEachDay() {
+        val items = arrayOf<Item>(Item("Conjured", 15, 20))
+        val app = GildedRose(items)
+
+        this.updateQualityNTimes(app, 5)
+
+        assertEquals("Conjured", app.items[0].name)
+        assertEquals(10, app.items[0].sellIn)
+        assertEquals(10, app.items[0].quality)
+    }
+
     private fun updateQualityNTimes(app: GildedRose, times: Int) {
         repeat(times) {
             app.updateQuality()

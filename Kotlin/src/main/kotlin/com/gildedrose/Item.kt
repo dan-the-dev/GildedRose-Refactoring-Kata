@@ -17,6 +17,10 @@ open class Item(var name: String, var sellIn: Int, var quality: Int) {
         return this.sellIn < number;
     }
 
+    fun sellInDaysAreBiggerThan(number: Int): Boolean {
+        return this.sellIn > number;
+    }
+
     fun increaseQuality() {
         if (this.quality < 50) {
             this.quality++;

@@ -4,6 +4,7 @@ class GildedRose(var items: Array<Item>) {
     val AGED_BRIE = "Aged Brie"
     val BACKSTAGE_PASS = "Backstage passes to a TAFKAL80ETC concert"
     val SULFURAS = "Sulfuras, Hand of Ragnaros"
+    val CONJURED = "Conjured"
 
     fun updateQuality() {
         items.map {
@@ -17,17 +18,22 @@ class GildedRose(var items: Array<Item>) {
     }
 
     private fun handleQuality(it: Item) {
-        if (isSpecialItem(it)) {
+        if (isItemThatIncreaseQualityWithTime(it)) {
             increaseSpecialItemsQuality(it)
-        } else {
+            return
+        }
+
+        it.decreaseQuality()
+        if (it.nameIsEqualsTo(CONJURED)) {
             it.decreaseQuality()
         }
     }
 
     private fun handleSellInDays(it: Item) {
-        if (!it.nameIsEqualsTo(SULFURAS)) {
-            it.decreaseSellIn()
+        if (it.nameIsEqualsTo(SULFURAS)) {
+            return
         }
+        it.decreaseSellIn()
     }
 
     private fun handleNegativeDaysQuality(item: Item) {
@@ -55,16 +61,18 @@ class GildedRose(var items: Array<Item>) {
     }
 
     private fun handleBackstagePassLatesDaysQualityIncrease(item: Item) {
-        if (item.sellInDaysAreLowerThan(11)) {
-            item.increaseQuality()
-
-            if (item.sellInDaysAreLowerThan(6)) {
-                item.increaseQuality()
-            }
+        if (item.sellInDaysAreBiggerThan(10)) {
+            return
         }
+        item.increaseQuality()
+
+        if (item.sellInDaysAreBiggerThan(5)) {
+            return
+        }
+        item.increaseQuality()
     }
 
-    private fun isSpecialItem(item: Item) =
+    private fun isItemThatIncreaseQualityWithTime(item: Item) =
             item.nameIsEqualsTo(AGED_BRIE) || item.nameIsEqualsTo(BACKSTAGE_PASS) || item.nameIsEqualsTo(SULFURAS)
 }
 
